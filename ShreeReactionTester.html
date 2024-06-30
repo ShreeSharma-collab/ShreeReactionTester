@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaction Tester</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            transition: background-color 0.5s; /* add transition effect to background color */
+        }
+        
+        #header {
+            background-color: #333; /* dark gray background */
+            color: #fff; /* white text */
+            padding: 20px;
+            text-align: center;
+        }
+        
+        #header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        #shape {
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            display: none;
+            position: absolute; /* change to absolute positioning */
+            border-radius: 10px; /* add some rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* add some shadow */
+            transition: transform 0.5s, background-color 0.5s; /* add transition effect to shape */
+        }
+        
+        #shape:hover {
+            transform: scale(1.1); /* add hover effect to shape */
+        }
+        
+        #time-taken {
+            font-size: 24px;
+            font-weight: bold;
+            color: #666; /* dark gray text */
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h1>Reaction Tester</h1>
+        <p>Test your reaction time!</p>
+    </div>
+    <p id="time-taken">Your time: <span id="timeTaken"></span></p>
+    <div id="shape"></div>
+    <script type="text/JavaScript">
+        let start = new Date().getTime();
+        let delay = 1000; // initial delay
+        
+        // Random Color Generator
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        
+        function changeBackgroundColor() {
+            document.body.style.backgroundColor = getRandomColor();
+        }
+        
+        function makeShapeAppear() {
+            let top = Math.random() * (window.innerHeight - 200); // adjust top position
+            let left = Math.random() * (window.innerWidth - 200); // adjust left position
+            let width = (Math.random() * 200) + 100;
+            
+            if (Math.random() > 0.5) {
+                document.getElementById("shape").style.borderRadius = "50%";
+            } else {
+                document.getElementById("shape").style.borderRadius = "0";
+            }
+            
+            document.getElementById("shape").style.backgroundColor = getRandomColor();
+            document.getElementById("shape").style.width = width + "px";
+            document.getElementById("shape").style.height = width + "px";
+            
+            document.getElementById("shape").style.top = top + "px";
+            document.getElementById("shape").style.left = left + "px";
+            
+            document.getElementById("shape").style.display = "block";
+            
+            start = new Date().getTime();
+        }
+        
+        function appearAfterDelay() {
+            setTimeout(makeShapeAppear, delay); // decrease delay over time
+            delay *= 0.9; // decrease delay by 10% each time
+            if (delay < 200) delay = 200; // minimum delay of 200ms
+        }
+        
+        appearAfterDelay();
+        
+        document.getElementById("shape").onclick = function() {
+            document.getElementById("shape").style.display = "none";
+            
+            let end = new Date().getTime();
+            
+            let timeTaken = (end - start) / 1000;
+            
+            document.getElementById("timeTaken").innerHTML = timeTaken.toFixed(2) + "s";
+            
+            appearAfterDelay();
+            changeBackgroundColor(); // change background color on click
+        }
+        
+        changeBackgroundColor(); // change background color on load
+    </script>
+</body>
+</html>
